@@ -9,10 +9,86 @@ const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+const Employee = require("./lib/Employee");
 
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
+const questions = [
+    {
+        type: 'input',
+        name: 'name',
+        message: 'Please enter your name: '
+    },
+    {
+        type: 'input',
+        name: 'email',
+        message: 'Please enter your email: '
+    },
+    {
+        type: 'list',
+        name: 'role',
+        message: 'What is your role?',
+        choices: ['Intern', 'Engineer', 'Manager']
+    }
+]
+const engineer = [
+    {
+        type: 'input',
+        name: 'github',
+        message: 'Please enter your github: '
+    }
+]
+
+const intern = [
+    {
+        type: 'input',
+        name: 'school',
+        message: 'Where do you go to school? '
+    }
+]
+
+const manager = [
+    {
+        type: 'input',
+        name: 'officeNumber',
+        message: 'Please enter your office number: '
+    }
+]
+
+
+inquirer.prompt(questions)
+    .then(response => {
+        let employee = new Employee;
+        switch (response.role) {
+            case 'Engineer':
+                inquirer.prompt(engineer)
+                    .then(roleResponse => {
+                        employee = new Engineer(response.name, 10, response.email, roleResponse.github);
+                        console.log(employee);
+                    });
+                break;
+            case 'Intern':
+                inquirer.prompt(intern)
+                    .then(roleResponse => {
+                        employee = new Intern(response.name, 10, response.email, roleResponse.school);
+                        console.log(employee);
+                    });;
+                break;
+            case 'Manager':
+                inquirer.prompt(manager)
+                    .then(roleResponse => {
+                        employee = new Manager(response.name, 10, response.email, roleResponse.officeNumber);
+                        console.log(employee);
+                    });
+                break;
+            default:
+                break;
+        }
+    });
+
+
+
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
@@ -28,8 +104,4 @@ const render = require("./lib/htmlRenderer");
 // information; write your code to ask different questions via inquirer depending on
 // employee type.
 
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
+
