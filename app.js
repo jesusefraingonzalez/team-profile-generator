@@ -12,8 +12,7 @@ const render = require("./lib/htmlRenderer");
 const Employee = require("./lib/Employee");
 
 
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
+let employees = [];
 const questions = [
     {
         type: 'input',
@@ -29,66 +28,86 @@ const questions = [
         type: 'list',
         name: 'role',
         message: 'What is your role?',
-        choices: ['Intern', 'Engineer', 'Manager']
+        choices: ['Intern', 'Engineer', 'Manager', 'Employee']
     }
-]
+];
 const engineer = [
     {
         type: 'input',
         name: 'github',
         message: 'Please enter your github: '
     }
-]
-
+];
 const intern = [
     {
         type: 'input',
         name: 'school',
         message: 'Where do you go to school? '
     }
-]
-
+];
 const manager = [
     {
         type: 'input',
         name: 'officeNumber',
         message: 'Please enter your office number: '
     }
-]
+];
 
+async function addNewEmployee(arr) {
+    let employee;
+    const { name, role, email } = await inquirer.prompt(questions);
 
-inquirer.prompt(questions)
-    .then(response => {
-        let employee = new Employee;
-        switch (response.role) {
-            case 'Engineer':
-                inquirer.prompt(engineer)
-                    .then(roleResponse => {
-                        employee = new Engineer(response.name, 10, response.email, roleResponse.github);
-                        console.log(employee);
-                    });
-                break;
-            case 'Intern':
-                inquirer.prompt(intern)
-                    .then(roleResponse => {
-                        employee = new Intern(response.name, 10, response.email, roleResponse.school);
-                        console.log(employee);
-                    });;
-                break;
-            case 'Manager':
-                inquirer.prompt(manager)
-                    .then(roleResponse => {
-                        employee = new Manager(response.name, 10, response.email, roleResponse.officeNumber);
-                        console.log(employee);
-                    });
-                break;
-            default:
-                break;
+    switch (role) {
+        case 'Engineer':
+            const { github } = await inquirer.prompt(engineer);
+            employee = new Engineer(name, 10, email, github);
+            arr.push(employee);
+            console.log(arr);
+            break;
+        case 'Intern':
+            const { school } = await inquirer.prompt(intern)
+            employee = new Intern(name, 10, email, school);
+            arr.push(employee);
+            console.log(arr);
+            break;
+        case 'Manager':
+            const { officeNumber } = await inquirer.prompt(manager)
+            employee = new Manager(name, 10, email, officeNumber);
+            arr.push(employee);
+            console.log(arr);
+            break;
+        default:
+            employee = new Employee(response.name, 10, response.email);
+            arr.push(employee);
+            console.log(arr);
+            break;
+    }
+}
+
+async function keepAdding() {
+    const {response} = await inquirer.prompt([
+        {
+            type: 'list',
+            message: 'Do you wish to keep adding employees?',
+            choices: ['Yes', 'No'],
+            name: 'response'
         }
-    });
+    ])
+
+    if (response === 'Yes') return true;
+    else return false;
+}
 
 
+const list = []
 
+for (let i = 0; i < 10; i++) {
+    list.push(new Employee("name" , 10 , "email"));
+}
+// addNewEmployee(list);
+console.log(list);
+const main = render(list);
+console.log(main);
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
@@ -99,9 +118,5 @@ inquirer.prompt(questions)
 // `output` folder. You can use the variable `outputPath` above target this location.
 // Hint: you may need to check if the `output` folder exists and create it if it
 // does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
 
 
