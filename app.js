@@ -29,63 +29,78 @@ const questions = [
         name: 'role',
         message: 'What is your role?',
         choices: ['Intern', 'Engineer', 'Manager', 'Employee']
-    }
-];
-const engineer = [
+    },
     {
         type: 'input',
         name: 'github',
-        message: 'Please enter your github: '
-    }
-];
-const intern = [
+        message: 'Please enter your github:',
+        when: (answers) => { return answers.role === 'Engineer' }
+    },
     {
         type: 'input',
         name: 'school',
-        message: 'Where do you go to school? '
-    }
-];
-const manager = [
+        message: 'Where do you go to school?',
+        when: (answers) => { return answers.role === 'Intern' }
+    },
     {
         type: 'input',
         name: 'officeNumber',
-        message: 'Please enter your office number: '
+        message: 'Please enter your office number: ',
+        when: (answers) => { return answers.role === 'Manager' }
+    },
+    {
+        type: 'confirm',
+        name: 'askAgain',
+        message: 'Would you like to add another employee?',
+        default: false
     }
 ];
 
 async function addNewEmployee(arr) {
     let employee;
-    const { name, role, email } = await inquirer.prompt(questions);
+
+    const { name, role, email, github, officeNumber, school } = await inquirer.prompt(questions);
 
     switch (role) {
         case 'Engineer':
-            const { github } = await inquirer.prompt(engineer);
             employee = new Engineer(name, 10, email, github);
-            arr.push(employee);
-            console.log(arr);
             break;
         case 'Intern':
-            const { school } = await inquirer.prompt(intern)
             employee = new Intern(name, 10, email, school);
-            arr.push(employee);
-            console.log(arr);
             break;
         case 'Manager':
-            const { officeNumber } = await inquirer.prompt(manager)
             employee = new Manager(name, 10, email, officeNumber);
-            arr.push(employee);
-            console.log(arr);
-            break;
-        default:
-            employee = new Employee(response.name, 10, response.email);
-            arr.push(employee);
-            console.log(arr);
             break;
     }
+    // switch (role) {
+    //     case 'Engineer':
+    //         const { github } = await inquirer.prompt(engineer);
+    //         employee = new Engineer(name, 10, email, github);
+    //         arr.push(employee);
+    //         console.log(arr);
+    //         break;
+    //     case 'Intern':
+    //         const { school } = await inquirer.prompt(intern)
+    //         employee = new Intern(name, 10, email, school);
+    //         arr.push(employee);
+    //         console.log(arr);
+    //         break;
+    //     case 'Manager':
+    //         const { officeNumber } = await inquirer.prompt(manager)
+    //         employee = new Manager(name, 10, email, officeNumber);
+    //         arr.push(employee);
+    //         console.log(arr);
+    //         break;
+    //     default:
+    //         employee = new Employee(response.name, 10, response.email);
+    //         arr.push(employee);
+    //         console.log(arr);
+    //         break;
+    // }
 }
 
 async function keepAdding() {
-    const {response} = await inquirer.prompt([
+    const { response } = await inquirer.prompt([
         {
             type: 'list',
             message: 'Do you wish to keep adding employees?',
@@ -101,13 +116,17 @@ async function keepAdding() {
 
 const list = []
 
-for (let i = 0; i < 10; i++) {
-    list.push(new Employee("name" , 10 , "email"));
-}
-// addNewEmployee(list);
-console.log(list);
-const main = render(list);
-console.log(main);
+// for (let i = 0; i < 3; i++) {
+//     list.push(new Engineer("name", 10, "email", 'github'));
+// }
+
+addNewEmployee(list);
+addNewEmployee(list);
+// console.log(list);
+const html = render(list);
+// console.log(html);
+
+fs.writeFileSync('./output/main.html', html);
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
