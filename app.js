@@ -58,8 +58,7 @@ const questions = [
 
 async function addNewEmployee(arr) {
     let employee;
-
-    const { name, role, email, github, officeNumber, school } = await inquirer.prompt(questions);
+    const { name, role, email, github, officeNumber, school , askAgain} = await inquirer.prompt(questions);
 
     switch (role) {
         case 'Engineer':
@@ -72,6 +71,11 @@ async function addNewEmployee(arr) {
             employee = new Manager(name, 10, email, officeNumber);
             break;
     }
+
+    if(askAgain){
+        addNewEmployee(arr);
+    }
+    else console.log(arr);
     // switch (role) {
     //     case 'Engineer':
     //         const { github } = await inquirer.prompt(engineer);
