@@ -11,8 +11,6 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 const Employee = require("./lib/Employee");
 
-
-let employees = [];
 const questions = [
     {
         type: 'input',
@@ -71,24 +69,31 @@ async function addNewEmployee(arr) {
             break;
     }
 
+    // calls function recursively if the user wishes to ask again
     if (askAgain) {
         addNewEmployee(arr);
     }
     else console.log(arr);
-    
-    
+
+
     const html = render(arr);
-    fs.writeFileSync('./output/main.html', html, 'utf8',
-        (err, data) => { err ? console.log(err) : console.log(data) });
+    fs.writeFile(outputPath, html, 'utf8',
+        (err) => {
+            if (err) {
+                // create path if it doesn't exist
+                fs.mkdir(OUTPUT_DIR, { recursive: true }, (error) => {
+                    if (error) console.log(error);
+                });
+            }
+            else console.log("\nFile written successfully");
+        });
 
 }
 
 const list = [];
 addNewEmployee(list);
 
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
+
 
 // After you have your html, you're now ready to create an HTML file using the HTML
 // returned from the `render` function. Now write it to a file named `team.html` in the
