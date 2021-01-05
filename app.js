@@ -73,21 +73,20 @@ async function addNewEmployee(arr) {
     if (askAgain) {
         addNewEmployee(arr);
     }
-    else console.log(arr);
-
-
-    const html = render(arr);
-    fs.writeFile(outputPath, html, 'utf8',
-        (err) => {
-            if (err) {
-                // create path if it doesn't exist
-                fs.mkdir(OUTPUT_DIR, { recursive: true }, (error) => {
-                    if (error) console.log(error);
-                });
-            }
-            else console.log("\nFile written successfully");
-        });
-
+    else {
+        const html = render(arr);
+        fs.writeFile(outputPath, html, 'utf8',
+            (err) => {
+                if (err) {
+                    // create path if it doesn't exist
+                    fs.mkdir(OUTPUT_DIR, { recursive: true }, (error) => {
+                        if (error) console.log(error);
+                    });
+                }
+                else console.log("\nFile written successfully");
+            });
+        console.log(arr);
+    }
 }
 
 const list = [];
