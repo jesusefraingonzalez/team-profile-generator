@@ -1,0 +1,15 @@
+.employee-card{
+    min-width: 300px;
+}
+.employee-card .card-header {
+    background: rgb(117, 117, 231);
+    text-align: center;
+}
+
+h1, h2, h3{
+    color: whitesmoke;
+}
+
+.team-heading{
+background: tomato;
+}
