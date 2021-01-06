@@ -14,36 +14,41 @@ const Employee = require("./lib/Employee");
 const questions = [
     {
         type: 'input',
+        name: 'id',
+        message: 'Please enter employee ID'
+    },
+    {
+        type: 'input',
         name: 'name',
-        message: 'Please enter your name: '
+        message: 'Please enter employee name: '
     },
     {
         type: 'input',
         name: 'email',
-        message: 'Please enter your email: '
+        message: 'Please enter employee email: '
     },
     {
         type: 'list',
         name: 'role',
-        message: 'What is your role?',
+        message: 'Please enter employee role: ',
         choices: ['Intern', 'Engineer', 'Manager']
     },
     {
         type: 'input',
         name: 'github',
-        message: 'Please enter your github:',
+        message: 'Please enter employee github:',
         when: (answers) => { return answers.role === 'Engineer' }
     },
     {
         type: 'input',
         name: 'school',
-        message: 'Where do you go to school?',
+        message: 'Please enter employee school: ',
         when: (answers) => { return answers.role === 'Intern' }
     },
     {
         type: 'input',
         name: 'officeNumber',
-        message: 'Please enter your office number: ',
+        message: 'Please enter employee office number: ',
         when: (answers) => { return answers.role === 'Manager' }
     },
     {
